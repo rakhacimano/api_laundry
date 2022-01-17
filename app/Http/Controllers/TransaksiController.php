@@ -84,7 +84,7 @@ class TransaksiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id_transaksi'      => 'required|numeric',
-            'status_cucian'           => 'required|string',
+            'status_pembayaran' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -95,9 +95,9 @@ class TransaksiController extends Controller
         }
 
         $transaksi = Transaksi::where('id_transaksi', $request->id_transaksi)->first();
-        $transaksi->status_pembayaran = $request->status_cucian;
+        $transaksi->status_pembayaran = $request->status_pembayaran;
 
-        if ($request->status_cucian == 'status_cucian') {
+        if ($request->status_pembayaran == 'dibayar') {
             $transaksi->tanggal_bayar = date('Y-m-d H:i:s');
         } else {
             $transaksi->tanggal_bayar = NULL;
@@ -107,7 +107,7 @@ class TransaksiController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Data Pembayaran Berhasil Diubah Menjadi ' . $request->status_cucian,
+            'message' => 'Data Pembayaran Berhasil Diubah Menjadi ' . $request->status_pembayaran,
         ]);
     }
 
@@ -125,7 +125,7 @@ class TransaksiController extends Controller
         }
 
         $query = DB::table('transaksi')
-            ->select('transaksi.id_transaksi', 'transaksi.tanggal', 'transaksi. status_cucian', 'transaksi.status_pembayaran', 'transaksi.tanggal_bayar', 'users.nama as nama_user', 'member.nama as nama_member')
+            ->select('transaksi.id_transaksi', 'transaksi.tanggal', 'transaksi.status_cucian', 'transaksi.status_pembayaran', 'transaksi.tanggal_bayar', 'users.nama as nama_user', 'member.nama as nama_member')
             ->join('users', 'users.id', '=', 'transaksi.id_user')
             ->join('outlet', 'outlet.id_outlet', '=', 'users.id_outlet')
             ->join('member', 'member.id_member', '=', 'transaksi.id_member')
@@ -144,7 +144,7 @@ class TransaksiController extends Controller
             foreach ($query->get() as $list) {
                 //get total transaksi
                 $get_total_transaksi = DB::table('detail_transaksi')
-                    ->select('detail_transaksi.id_detail_transaksi', 'detail_transaksi.id_paket', 'paket.jenis', 'detail_transaksi.berat', DB::raw('paket.harga*detail_transaksi.berat as sub_total'))
+                    ->select('detail_transaksi.id_detail_transaksi', 'detail_transaksi.id_paket', 'paket.jenis_paket', 'detail_transaksi.berat', DB::raw('paket.harga*detail_transaksi.berat as sub_total'))
                     ->join('paket', 'paket.id_paket', "=", "detail_transaksi.id_paket")
                     ->where('detail_transaksi.id_transaksi', '=', $list->id_transaksi)
                     ->get();
