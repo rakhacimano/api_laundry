@@ -14,6 +14,7 @@ class Users extends Migration
             $table->unsignedBigInteger('id_outlet');
             $table->string('nama');
             $table->string('username');
+            $table->string('password');
             $table->enum('role', ['admin', 'kasir', 'owner']);
             $table->timestamps();
 

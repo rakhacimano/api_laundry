@@ -14,6 +14,7 @@ class Transaksi extends Migration
             $table->unsignedBigInteger('id_member');
             $table->unsignedBigInteger('id_user');
             $table->date('tanggal');
+            $table->date('batas_waktu');
             $table->date('tanggal_bayar');
             $table->enum('status_cucian', ['baru', 'proses', 'selesai', 'diambil']);
             $table->enum('status_pembayaran', ['dibayar', 'belum_dibayar']);
