@@ -110,7 +110,7 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
-        if (JWTAuth::invalidate(JWTAuth::getToken)) {
+        if (JWTAuth::invalidate(JWTAuth::getToken())) {
             return response()->json([
                 'success' => true,
                 'message' => 'You Are Logged Out!'

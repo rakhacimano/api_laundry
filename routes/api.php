@@ -20,19 +20,20 @@ Route::get('user/login/check', [UserController::class, 'loginCheck']);
 Route::post('user/logout', [UserController::class, 'logout']);
 
 // Member Routers
-// Route::group(['middleware' => ['jwt.verify:admin']], function () {
+Route::group(['middleware' => ['jwt.verify:admin, kasir']], function () {
+    // Transaksi Routers
     Route::post('transaksi', [TransaksiController::class, 'insert']);
     Route::put('transaksi/status', [TransaksiController::class, 'update_status']);
     Route::put('transaksi/bayar', [TransaksiController::class, 'update_bayar']);
-
     Route::post('transaksi/report', [TransaksiController::class, 'report']);
 
+    // Member Routers
     Route::post('member', [MemberController::class, 'insert']);
     Route::put('member/{id_member}', [MemberController::class, 'update']);
     Route::delete('member/{id_member}', [MemberController::class, 'delete']);
     Route::get('member', [MemberController::class, 'getAll']);
     Route::get('member/{id_member}', [MemberController::class, 'getById']);
-// });
+});
 
 // Paket Routers
 Route::post('paket', [PaketController::class, 'insert']);
@@ -42,10 +43,10 @@ Route::get('paket', [PaketController::class, 'getAll']);
 Route::get('paket/{id_paket}', [PaketController::class, 'getById']);
 
 // Outlet Routers
-// Route::group(['middleware' => ['jwt.verify:admin']], function () {
+Route::group(['middleware' => ['jwt.verify:admin']], function () {
     Route::post('outlet', [OutletController::class, 'insert']);
     Route::put('outlet/{id_outlet}', [OutletController::class, 'update']);
     Route::delete('outlet/{id_outlet}', [OutletController::class, 'delete']);
     Route::get('outlet', [OutletController::class, 'getAll']);
     Route::get('outlet/{id_outlet}', [OutletController::class, 'getById']);
-// });
+});

@@ -113,28 +113,39 @@ class TransaksiController extends Controller
 
     public function report(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'tahun' => 'required|numeric',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'tahun' => 'required|numeric',
+        // ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors(),
-            ]);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => $validator->errors(),
+        //     ]);
+        // }
 
         $query = DB::table('transaksi')
             ->select('transaksi.id_transaksi', 'transaksi.tanggal', 'transaksi.status_cucian', 'transaksi.status_pembayaran', 'transaksi.tanggal_bayar', 'users.nama as nama_user', 'member.nama as nama_member')
             ->join('users', 'users.id', '=', 'transaksi.id_user')
             ->join('outlet', 'outlet.id_outlet', '=', 'users.id_outlet')
-            ->join('member', 'member.id_member', '=', 'transaksi.id_member')
-            ->whereYear('transaksi.tanggal', '=', $request->tahun);
+            ->join('member', 'member.id_member', '=', 'transaksi.id_member');
 
-        if ($request->bulan != NULL) {
+        // whereYear('transaksi.tanggal', '=', $request->tahun
+
+        // Selector By Tahun
+        if ($request->tahun == "") {
+            $query->whereYear('transaksi.tanggal', '=', date('Y'));
+        } else {
+            $query->whereYear('transaksi.tanggal', '=', $request->tahun);
+        }
+
+        // Selector By Bulan
+        if ($request->bulan != "") {
             $query->WhereMonth('transaksi.tanggal', '=', $request->bulan);
         }
-        if ($request->tanggal != NULL) {
+
+        // Selector By Tanggal
+        if ($request->tanggal != "") { 
             $query->WhereDay('transaksi.tanggal', '=', $request->tanggal);
         }
 
