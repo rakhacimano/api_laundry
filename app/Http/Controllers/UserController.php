@@ -32,12 +32,12 @@ class UserController extends Controller
         }
 
         $user = new User();
-		$user->id_outlet= $request->id_outlet;
-		$user->nama 	= $request->nama;
-		$user->username = $request->username;
-		$user->role 	= $request->role;
-		$user->password = Hash::make($request->password);
-		$user->save();
+        $user->id_outlet = $request->id_outlet;
+        $user->nama     = $request->nama;
+        $user->username = $request->username;
+        $user->role     = $request->role;
+        $user->password = Hash::make($request->password);
+        $user->save();
 
         $data = User::where('username', '=', $request->username)->first();
 
@@ -84,17 +84,17 @@ class UserController extends Controller
             if (!$user = JWTAuth::parseToken()->authenticate()) {
                 return $this->response->errorResponse('Invalid Token!');
             }
-        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Token Expired!'
             ]);
-        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Token Invalid!'
             ]);
-        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Authorization Token Not Found!'
