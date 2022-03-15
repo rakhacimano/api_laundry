@@ -14,7 +14,7 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id_outlet' => 'required|string|max:20',
+            'id_outlet' => 'required|numeric|max:20',
             'nama' => 'required|string|max:255',
 
             // unique:Users digunakan untuk cek apakah username unik dan belum digunakan apa belum
@@ -128,6 +128,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'id_outlet' => 'required|numeric',
             'nama' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
             'role' => 'required',
         ]);
 
@@ -173,10 +174,30 @@ class UserController extends Controller
         }
     }
 
+    // public function getAll()
+    // {
+    //     $data['count'] = User::count();
+    //     $data['user'] = User::with('outlet')->get();
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'data' => $data
+    //     ]);
+    // }
+
+    // public function getById($id)
+    // {
+    //     $data['user'] = User::where('id', $id)->get();
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'data' => $data
+    //     ]);
+    // }
     public function getAll()
     {
-        $data['count'] = User::count();
-        $data['user'] = User::with('outlet')->get();
+        $data["count"] = User::count();
+        $data["users"] = User::with('outlet')->get();
 
         return response()->json([
             'success' => true,
@@ -186,7 +207,7 @@ class UserController extends Controller
 
     public function getById($id)
     {
-        $data['user'] = User::where('id', $id)->get();
+        $data["users"] = User::where('id', $id)->get();
 
         return response()->json([
             'success' => true,
