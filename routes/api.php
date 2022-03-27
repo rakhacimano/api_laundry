@@ -16,11 +16,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('user/register', [UserController::class, 'register']);
 Route::post('user/login', [UserController::class, 'login']);
 Route::put('user/{id}', [UserController::class, 'update']);
+Route::delete('user/{id}', [UserController::class, 'delete']);
 
 Route::get('user/login/check', [UserController::class, 'loginCheck']);
 Route::post('user/logout', [UserController::class, 'logout']);
 Route::get('user', [UserController::class, 'getAll']);
-Route::get('user/{id_user}', [UserController::class, 'getById']);
+Route::get('user/{id}', [UserController::class, 'getById']);
+
+Route::post('transaksi/report', [TransaksiController::class, 'report']);
 
 // Member Routers
 Route::group(['middleware' => ['jwt.verify:admin, kasir']], function () {
@@ -29,7 +32,6 @@ Route::group(['middleware' => ['jwt.verify:admin, kasir']], function () {
     Route::post('transaksi', [TransaksiController::class, 'insert']);
     Route::put('transaksi/status', [TransaksiController::class, 'update_status']);
     Route::put('transaksi/bayar', [TransaksiController::class, 'update_bayar']);
-    Route::post('transaksi/report', [TransaksiController::class, 'report']);
 
     // Member Routers
     Route::post('member', [MemberController::class, 'insert']);

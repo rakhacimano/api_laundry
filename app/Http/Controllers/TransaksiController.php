@@ -7,6 +7,8 @@ use App\Models\DetailTransaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class TransaksiController extends Controller
 {
@@ -124,30 +126,35 @@ class TransaksiController extends Controller
         //     ]);
         // }
 
+        $user = JWTAuth::parseToken()->authenticate();
+
         $query = DB::table('transaksi')
             ->select('transaksi.id_transaksi', 'transaksi.tanggal', 'transaksi.status_cucian', 'transaksi.status_pembayaran', 'transaksi.tanggal_bayar', 'users.nama as nama_user', 'member.nama as nama_member')
             ->join('users', 'users.id', '=', 'transaksi.id_user')
             ->join('outlet', 'outlet.id_outlet', '=', 'users.id_outlet')
-            ->join('member', 'member.id_member', '=', 'transaksi.id_member');
+            ->join('member', 'member.id_member', '=', 'transaksi.id_member')
+            ->where('users.id_outlet', '=', $user['id_outlet']);
 
         // whereYear('transaksi.tanggal', '=', $request->tahun
 
         // Selector By Tahun
         if ($request->tahun == "") {
-            $query->whereYear('transaksi.tanggal', '=', date('Y'));
-        } else {
             $query->whereYear('transaksi.tanggal', '=', $request->tahun);
-        }
+        } 
+
+        // else {
+        //     $query->whereYear('transaksi.tanggal', '=', $request->tahun);
+        // }
 
         // Selector By Bulan
-        if ($request->bulan != "") {
+        if ($request->bulan != NULL) {
             $query->WhereMonth('transaksi.tanggal', '=', $request->bulan);
         }
 
-        // Selector By Tanggal
-        if ($request->tanggal != "") { 
-            $query->WhereDay('transaksi.tanggal', '=', $request->tanggal);
-        }
+        // // Selector By Tanggal
+        // if ($request->tanggal != "") { 
+        //     $query->WhereDay('transaksi.tanggal', '=', $request->tanggal);
+        // }
 
         if (count($query->get()) > 0) {
             $data['status_cucian'] = true;
