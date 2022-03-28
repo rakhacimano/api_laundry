@@ -140,24 +140,20 @@ class TransaksiController extends Controller
         // Selector By Tahun
         if ($request->tahun == "") {
             $query->whereYear('transaksi.tanggal', '=', $request->tahun);
-        } 
+        } else {
+            $query->whereYear('transaksi.tanggal', '=', $request->tahun);
+        }
 
-        // else {
-        //     $query->whereYear('transaksi.tanggal', '=', $request->tahun);
-        // }
-
-        // Selector By Bulan
-        if ($request->bulan != NULL) {
+        if ($request->bulan != "") {
             $query->WhereMonth('transaksi.tanggal', '=', $request->bulan);
         }
 
-        // // Selector By Tanggal
-        // if ($request->tanggal != "") { 
+        // if ($request->tanggal != "") {
         //     $query->WhereDay('transaksi.tanggal', '=', $request->tanggal);
         // }
 
         if (count($query->get()) > 0) {
-            $data['status_cucian'] = true;
+            // $data['status_cucian'] = true;
             $i = 0;
             foreach ($query->get() as $list) {
                 //get total transaksi
