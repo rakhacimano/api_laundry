@@ -23,11 +23,21 @@ Route::post('user/logout', [UserController::class, 'logout']);
 Route::get('user', [UserController::class, 'getAll']);
 Route::get('user/{id}', [UserController::class, 'getById']);
 
+// Displayable Routes Without Authentication
 Route::post('transaksi/report', [TransaksiController::class, 'report']);
 
+Route::get('paket', [PaketController::class, 'getAll']);
+Route::get('paket/{id_paket}', [PaketController::class, 'getById']);
+
+Route::get('member', [MemberController::class, 'getAll']);
+Route::get('member/{id_member}', [MemberController::class, 'getById']);
+
+Route::get('outlet', [OutletController::class, 'getAll']);
+Route::get('outlet/{id_outlet}', [OutletController::class, 'getById']);
+
 // Member Routers
-Route::group(['middleware' => ['jwt.verify:admin, kasir']], function () {
-    
+Route::group(['middleware' => ['jwt.verify:admin,kasir']], function () {
+
     // Transaksi Routers
     Route::post('transaksi', [TransaksiController::class, 'insert']);
     Route::put('transaksi/status', [TransaksiController::class, 'update_status']);
@@ -37,8 +47,6 @@ Route::group(['middleware' => ['jwt.verify:admin, kasir']], function () {
     Route::post('member', [MemberController::class, 'insert']);
     Route::put('member/{id_member}', [MemberController::class, 'update']);
     Route::delete('member/{id_member}', [MemberController::class, 'delete']);
-    Route::get('member', [MemberController::class, 'getAll']);
-    Route::get('member/{id_member}', [MemberController::class, 'getById']);
 });
 
 // Outlet Routers
@@ -46,13 +54,9 @@ Route::group(['middleware' => ['jwt.verify:admin']], function () {
     Route::post('outlet', [OutletController::class, 'insert']);
     Route::put('outlet/{id_outlet}', [OutletController::class, 'update']);
     Route::delete('outlet/{id_outlet}', [OutletController::class, 'delete']);
-    Route::get('outlet', [OutletController::class, 'getAll']);
-    Route::get('outlet/{id_outlet}', [OutletController::class, 'getById']);
 
     // Paket Routers
     Route::post('paket', [PaketController::class, 'insert']);
     Route::put('paket/{id_paket}', [PaketController::class, 'update']);
     Route::delete('paket/{id_paket}', [PaketController::class, 'delete']);
-    Route::get('paket', [PaketController::class, 'getAll']);
-    Route::get('paket/{id_paket}', [PaketController::class, 'getById']);
 });
